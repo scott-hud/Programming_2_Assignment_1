@@ -36,16 +36,16 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
             Console.WriteLine("Hello what is you're name?");
             String name = Console.ReadLine();
             // Part 1 - Instantiate Number of Enemies
-            Enemy redGhost = new Enemy("Red Ghost", "Killable", new ThreeDPoint(20, 40, 100));
-            Enemy blueGhost = new Enemy("Blue Ghost", "not Killable", new ThreeDPoint(80, 100, 100));
-            Enemy greenGhost = new Enemy("Green Ghost", "Killable", new ThreeDPoint(10, 10, 100));
+            Enemy redGhost = new Enemy("Red Ghost", "Killable", new Grid(40, 40));
+            Enemy blueGhost = new Enemy("Blue Ghost", "not Killable", new Grid(90, 10));
+            Enemy greenGhost = new Enemy("Green Ghost", "Killable", new Grid( 10, 60));
 
             randomNumber generator = new randomNumber();
             int randomX = generator.RandomNumber(0, 100);
             int randomY = generator.RandomNumber(0, 100);
 
             // Part 3 Create PLayer Object
-            Player thePlayer = new Player( name, 100, 10, new ThreeDPoint(18, 40, 100));
+            Player thePlayer = new Player( name, 100, 10, new Grid( 40, 100));
 
             // Part 2 Create a List that holds Enemy objects
             List<Enemy> myEnemyList = new List<Enemy>();
@@ -74,10 +74,10 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
 
             public string enemyType;
             public string enemyState;
-            public ThreeDPoint enemyPosition;
+            public Grid enemyPosition;
             public static int numberEnemies;
 
-            public Enemy(string type, string state, ThreeDPoint position)
+            public Enemy(string type, string state, Grid position)
             {
                 enemyType = type;
                 enemyState = state;
@@ -88,13 +88,13 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
             // Member function that prints status of Eenemy object
             public void printStatus()
             {
-                Console.WriteLine("The {0} Enemy is {1} and is at <{2},{3},{4}> location", enemyType, enemyState, enemyPosition.x, enemyPosition.y, enemyPosition.z);
+                Console.WriteLine("The {0} Enemy is {1} and is at <{2},{3}> location", enemyType, enemyState, enemyPosition.x, enemyPosition.y);
             }
 
-            // Part 4 - Function to Update elemnets of list with new x, y, z values
+            // Part 4 - Function to Update elemnets of list with new x, y values
             public double getPositionTo(Player thePlayer)
             {
-                double theDistance = (Math.Sqrt(Math.Pow(Math.Abs(this.enemyPosition.x - thePlayer.playerPosition.x), 2) + Math.Pow(Math.Abs(this.enemyPosition.y - thePlayer.playerPosition.y), 2) + Math.Pow(Math.Abs(this.enemyPosition.z - thePlayer.playerPosition.z), 2)));
+                double theDistance = (Math.Sqrt(Math.Pow(Math.Abs(this.enemyPosition.x - thePlayer.playerPosition.x), 2) + Math.Pow(Math.Abs(this.enemyPosition.y - thePlayer.playerPosition.y), 2)));
                 //Console.WriteLine ("The Distance to the Player is: {0}", theDistance);
                 return theDistance;
             }
@@ -108,11 +108,11 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
             // Player member variables
             public string playerName;
             public int playerHealth;
-            public ThreeDPoint playerPosition;
+            public Grid playerPosition;
             public int playerAmmo;
 
             // Player instance constructor
-            public Player(string name, int health, int Ammo, ThreeDPoint position)
+            public Player(string name, int health, int Ammo, Grid position)
             {
                 
                 playerName = name;
@@ -120,14 +120,13 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
                 playerAmmo = Ammo;
                 playerPosition = position;
                
-                
             }
            
 
             //Print status of the Player object
             public void printStatus()
             {
-                Console.WriteLine("The Player {0}  is at {1},{2},{3} location", playerName, playerPosition.x, playerPosition.y, playerPosition.z);
+                Console.WriteLine("The Player {0}  is at {1},{2} location", playerName, playerPosition.x, playerPosition.y);
             }
 
             // Function to determine distannce to list of enemies
@@ -139,7 +138,7 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
                 {
 
                     // Calculate the diatance from each enemy to the player
-                    double theDistance = (Math.Sqrt(Math.Pow(Math.Abs(enemy.enemyPosition.x - this.playerPosition.x), 2) + Math.Pow(Math.Abs(enemy.enemyPosition.y - this.playerPosition.y), 2) + Math.Pow(Math.Abs(enemy.enemyPosition.z - this.playerPosition.z), 2)));
+                    double theDistance = (Math.Sqrt(Math.Pow(Math.Abs(enemy.enemyPosition.x - this.playerPosition.x), 2) + Math.Pow(Math.Abs(enemy.enemyPosition.y - this.playerPosition.y), 2)));
 
                     // condition that checks the distance is < 10 m
                     if (theDistance < 10)
@@ -155,18 +154,18 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
         }
 
         // Create a ThreeDPoint struct to store the location
-        public struct ThreeDPoint
+        public struct Grid
         {
 
             public int x;
             public int y;
-            public int z;
+            
 
-            public ThreeDPoint(int p1, int p2, int p3)
+            public Grid(int p1, int p2)
             {
                 x = p1;
                 y = p2;
-                z = p3;
+                
             }
         }
         public class randomNumber
