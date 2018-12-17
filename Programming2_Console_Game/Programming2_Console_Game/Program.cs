@@ -38,35 +38,42 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
 
             Console.WriteLine("Hello what is you're name?");
             String name = Console.ReadLine();
-            
+            if (!String.IsNullOrEmpty(name))
+            {
 
-            // Part 1 - Instantiate Number of Enemies
-            Enemy redGhost = new Enemy("Dave", "Killable", new Grid( x , y));
-            Enemy blueGhost = new Enemy("John", "not Killable", new Grid(x, y));
-            Enemy greenGhost = new Enemy("Samantha", "Killable", new Grid( x, y));
+                // Part 1 - Instantiate Number of Enemies
+                Enemy NPC1 = new Enemy("Dave", "Killable", new Grid(x, y));
+                Enemy NPC2 = new Enemy("John", "not Killable", new Grid(x, y));
+                Enemy NPC3 = new Enemy("Samantha", "Killable", new Grid(x, y));
 
-            // Part 3 Create PLayer Object
-            Player thePlayer = new Player( name, 100, 10, new Grid( x, y));
+                // Part 3 Create PLayer Object
+                Player thePlayer = new Player(name, 100, 10, new Grid(x, y));
 
-            // Part 2 Create a List that holds Enemy objects
-            List<Enemy> myEnemyList = new List<Enemy>();
+                // Part 2 Create a List that holds Enemy objects
+                List<Enemy> myEnemyList = new List<Enemy>();
 
-            // Add Objects to the List 
-            myEnemyList.Add(redGhost);
-            myEnemyList.Add(blueGhost);
-            myEnemyList.Add(greenGhost);
+                // Add Objects to the List 
+                myEnemyList.Add(NPC1);
+                myEnemyList.Add(NPC2);
+                myEnemyList.Add(NPC3);
 
-            // Print Status of Each enemy and the player
-            thePlayer.printStatus();
-            redGhost.printStatus();
-            blueGhost.printStatus();
-            greenGhost.printStatus();
+                // Print Status of Each enemy and the player
+                thePlayer.printStatus();
+                NPC1.printStatus();
+                NPC2.printStatus();
+                NPC3.printStatus();
 
-            // Print distance from an Enemy (Red Ghost) to the Player
-            Console.WriteLine("Distance from {0} to the Player is {1}", redGhost.NPCName, redGhost.getPositionTo(thePlayer));
+                // Print distance from NPC1 to the Player
+                foreach (Enemy Enemy in myEnemyList)
+                {
+                    thePlayer.getPositionToAllEnemies(myEnemyList);
+                }
+                //Console.WriteLine("Distance from {0} to the Player is {1}", NPC1.NPCName, NPC1.getPositionTo(thePlayer));
+                //Console.WriteLine("Distance between the player {0} and t ");
 
-            // Print distance from Player to all Enemey Obejcts 
-            thePlayer.getPositionToAllEnemies(myEnemyList);
+                // Print distance from Player to all Enemey Obejcts 
+                thePlayer.getPositionToAllEnemies(myEnemyList);
+            }
         }
 
         //   Create NPC: When this command is called, ask for the name of the NPC and create an NPC object with a randomly generated position on a 100 x 100 grid and randomly
