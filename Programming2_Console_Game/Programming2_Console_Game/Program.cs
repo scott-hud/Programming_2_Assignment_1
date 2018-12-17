@@ -6,50 +6,43 @@ using System.Threading.Tasks;
 
 namespace Programming2_Console_Game
 {
-   /* 
+    /* 
+
+ 3. Shoot: When this command is called, ask for the name of the NPC to shoot. If the NPC is within distance, is an enemy and has health points remaining, then reduce their
+ health by 1. If the NPC is a friend, then reduce the players health points by 2. When an enemy’s health reaches 0, the enemy is dead. Each time an enemy is killed,
+ the status of all friends and enemies has to be checked to determine if the game is over.
 
 
-3. Shoot: When this command is called, ask for the name of the NPC to shoot. If the NPC is within distance, is an enemy and has health points remaining, then reduce their
-health by 1. If the NPC is a friend, then reduce the players health points by 2. When an enemy’s health reaches 0, the enemy is dead. Each time an enemy is killed,
-the status of all friends and enemies has to be checked to determine if the game is over.
+ 5. Query NPC: When this command is called, ask for an NPC’s name and print the NPC’s
+ backstory.
 
-4. Move: When this command is called, ask for a new position, update the players position and reduce their health by 1.
-
-5. Query NPC: When this command is called, ask for an NPC’s name and print the NPC’s
-backstory.
-
-6. Request Alliance: When this command is called, ask for the NPC’s name. If the NPC’s type is enemy, then the player loses 2 health points and their allegiance status
-is set to “enemy”. If the NPC’s type is friend, then their allegiance status is set to “friend”.
-
-
-
- 8. Print NPC Status: When this commend is called, print the current status of all NPCs. This should include health values, their allegiance status and their distance
- from the player.*/
+ 6. Request Alliance: When this command is called, ask for the NPC’s name. If the NPC’s type is enemy, then the player loses 2 health points and their allegiance status
+ is set to “enemy”. If the NPC’s type is friend, then their allegiance status is set to “friend”.
+*/
 
 
     class MainClass
     {
         public static void Main(string[] args)
         {
-            Boolean RequestStats = false;
+            //Boolean RequestStats = false;
             Random random = new Random();
             int x = random.Next(1, 101);
             int y = random.Next(1, 101);
 
-            Console.WriteLine("Hello what is you're name?");
+            Console.WriteLine("Hello what is you're name? NPCs will be randomly generated too.");
             String name = Console.ReadLine();
             if (!String.IsNullOrEmpty(name))
             {
-
-                // Part 1 - Instantiate Number of Enemies
-                Enemy NPC1 = new Enemy("Dave", "Killable", new Grid(x, y));
-                Enemy NPC2 = new Enemy("John", "not Killable", new Grid(x, y));
-                Enemy NPC3 = new Enemy("Samantha", "Killable", new Grid(x, y));
-
-                // Part 3 Create PLayer Object
+                // Creating the player
                 Player thePlayer = new Player(name, 100, 10, new Grid(x, y));
 
-                // Part 2 Create a List that holds Enemy objects
+                // Creating the NPCs
+                Enemy NPC1 = new Enemy("Dave", "Killable", 10,  new Grid(x, y));
+                Enemy NPC2 = new Enemy("John", "not Killable", 10, new Grid(x, y));
+                Enemy NPC3 = new Enemy("Samantha", "Killable", 10, new Grid(x, y));
+
+                // List holding NPCs data
                 List<Enemy> myEnemyList = new List<Enemy>();
 
                 // Add Objects to the List 
@@ -63,21 +56,17 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
                 NPC2.printStatus();
                 NPC3.printStatus();
 
-                // Print distance from NPC1 to the Player
-                foreach (Enemy Enemy in myEnemyList)
-                {
-                    thePlayer.getPositionToAllEnemies(myEnemyList);
-                }
-                //Console.WriteLine("Distance from {0} to the Player is {1}", NPC1.NPCName, NPC1.getPositionTo(thePlayer));
-                //Console.WriteLine("Distance between the player {0} and t ");
-
                 // Print distance from Player to all Enemey Obejcts 
                 thePlayer.getPositionToAllEnemies(myEnemyList);
+                
             }
+
+            //Console.WriteLine("");
         }
 
+
         //   Create NPC: When this command is called, ask for the name of the NPC and create an NPC object with a randomly generated position on a 100 x 100 grid and randomly
-       // generated type and backstory values(the type and backstory should be related). A maximum of 5 NPC objects can be created.
+        // generated type and backstory values(the type and backstory should be related). A maximum of 5 NPC objects can be created.
         public class Enemy
         {
 
@@ -85,11 +74,13 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
             public string NPCState;
             public Grid NPCPosition;
             public static int numberNPCs;
+            public int NPCHealth;
 
-            public Enemy(string Nname, string state, Grid position)
+            public Enemy(string nName, string state, int health, Grid position)
             {
-                NPCName = Nname;
+                NPCName = nName;
                 NPCState = state;
+                NPCHealth = health;
                 NPCPosition = position;
                 numberNPCs++;
             }
@@ -97,14 +88,14 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
             // Member function that prints status of Eenemy object
             public void printStatus()
             {
-                Console.WriteLine("The {0} Enemy is {1} and is at ({2},{3}) location", NPCName, NPCState, NPCPosition.x, NPCPosition.y);
+                Console.WriteLine("NPC {0}'s health is {4} is {1} and is at ({2},{3}) location", NPCName, NPCState, NPCPosition.x, NPCPosition.y, NPCHealth);
             }
 
-            // Part 4 - Function to Update elemnets of list with new x, y values
+            // Part 4 - Function to Update elements of list with new x, y values
             public double getPositionTo(Player thePlayer)
             {
                 double theDistance = (Math.Sqrt(Math.Pow(Math.Abs(this.NPCPosition.x - thePlayer.playerPosition.x), 2) + Math.Pow(Math.Abs(this.NPCPosition.y - thePlayer.playerPosition.y), 2)));
-                //Console.WriteLine ("The Distance to the Player is: {0}", theDistance);
+
                 return theDistance;
             }
         }
@@ -123,24 +114,24 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
             // Player instance constructor
             public Player(string name, int health, int Ammo, Grid position)
             {
-                
+
                 playerName = name;
                 playerHealth = health;
                 playerAmmo = Ammo;
                 playerPosition = position;
 
             }
-           
+
             //7. Print Player Status: When this command is called, print the current status of the player.This should include the players health value, ammunition value and position.
             public void printStatus()
             {
-               // Console.WriteLine("You can request to see your status anytime by typing STATS");
+                // Console.WriteLine("You can request to see your status anytime by typing STATS");
                 //Console.ReadLine();
-               Console.WriteLine("The Player {0} is at {3},{4} location, You're health is: {1}. Ammo count: {2}.", playerName, playerHealth, playerAmmo, playerPosition.x, playerPosition.y);
-                
+                Console.WriteLine("The Player {0} is at {3},{4} location, You're health is: {1}. Ammo count: {2}.", playerName, playerHealth, playerAmmo, playerPosition.x, playerPosition.y);
+
             }
 
-            // Function to determine distannce to list of enemies
+            // Function to determine distance to list of enemies
             public void getPositionToAllEnemies(List<Enemy> theEnemies)
             {
 
@@ -164,30 +155,48 @@ is set to “enemy”. If the NPC’s type is friend, then their allegiance stat
             }
         }
 
-        // Create a ThreeDPoint struct to store the location
-         public struct Grid
-         {
+        // Create a 2D grid 
+        public struct Grid
+        {
 
-             public int x;
-             public int y;
-
-
-             public Grid(int p1, int p2)
-             {
-                 x = p1;
-                 y = p2;
-
-             }
-         }
-        /* public class randomNumber
-          {
-             public int RandomNumber(int min, int max)
-         {
-             Random r = new Random();
-             return r.Next(min, max);
-         }
-     }*/
+            public int x;
+            public int y;
 
 
+            public Grid(int p1, int p2)
+            {
+                x = p1;
+                y = p2;
+
+            }
+        }
+
+        // 4. Move: When this command is called, ask for a new position, update the players position and reduce their health by 1.
+        public void Move()
+        {
+            double n;
+            double y;
+            Console.WriteLine("Please Enter A Number:");
+            //get input from the user and store it in the variable myInputNumber
+            String myInputNumber = Console.ReadLine();
+            //now use a selection to determine whether the user typed anything
+            if (String.IsNullOrEmpty(myInputNumber))
+            {
+                
+                Console.WriteLine("No input was provided!");
+
+            }
+            else if (double.TryParse(myInputNumber, out n ))
+            {
+                Console.WriteLine("The number you entered was: " + n );
+
+            }
+            else
+            {
+                Console.WriteLine("You did not enter a number!");
+
+            }
+
+        }
     }
 }
