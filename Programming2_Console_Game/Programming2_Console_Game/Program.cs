@@ -6,17 +6,46 @@ using System.Threading.Tasks;
 
 namespace Programming2_Console_Game
 {
+   /* 
+
+//  Create NPC: When this command is called, ask for the name of the NPC and create an NPC object with a randomly generated position on a 100 x 100 grid and randomly
+generated type and backstory values (the type and backstory should be related). A maximum of 5 NPC objects can be created.
+
+3. Shoot: When this command is called, ask for the name of the NPC to shoot. If the NPC is within distance, is an enemy and has health points remaining, then reduce their
+health by 1. If the NPC is a friend, then reduce the players health points by 2. When an enemy’s health reaches 0, the enemy is dead. Each time an enemy is killed,
+the status of all friends and enemies has to be checked to determine if the game is over.
+
+        4. Move: When this command is called, ask for a new position, update the players position and reduce their health by 1.
+
+5. Query NPC: When this command is called, ask for an NPC’s name and print the NPC’s
+backstory.
+
+6. Request Alliance: When this command is called, ask for the NPC’s name. If the NPC’s type is enemy, then the player loses 2 health points and their allegiance status
+is set to “enemy”. If the NPC’s type is friend, then their allegiance status is set to “friend”.
+
+7. Print Player Status: When this command is called, print the current status of the player.This should include the players health value, ammunition value and position.
+
+ 8. Print NPC Status: When this commend is called, print the current status of all NPCs. This should include health values, their allegiance status and their distance
+ from the player.*/
+
+
     class MainClass
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("Hello what is you're name?");
+            String name = Console.ReadLine();
             // Part 1 - Instantiate Number of Enemies
             Enemy redGhost = new Enemy("Red Ghost", "Killable", new ThreeDPoint(20, 40, 100));
             Enemy blueGhost = new Enemy("Blue Ghost", "not Killable", new ThreeDPoint(80, 100, 100));
             Enemy greenGhost = new Enemy("Green Ghost", "Killable", new ThreeDPoint(10, 10, 100));
 
+            randomNumber generator = new randomNumber();
+            int randomX = generator.RandomNumber(0, 100);
+            int randomY = generator.RandomNumber(0, 100);
+
             // Part 3 Create PLayer Object
-            Player thePlayer = new Player("Steve", 100, 10, new ThreeDPoint(18, 40, 100));
+            Player thePlayer = new Player( name, 100, 10, new ThreeDPoint(18, 40, 100));
 
             // Part 2 Create a List that holds Enemy objects
             List<Enemy> myEnemyList = new List<Enemy>();
@@ -59,7 +88,7 @@ namespace Programming2_Console_Game
             // Member function that prints status of Eenemy object
             public void printStatus()
             {
-                Console.WriteLine("The <{0}> Enemy is <{1}> and is at <{2},{3},{4}> location", enemyType, enemyState, enemyPosition.x, enemyPosition.y, enemyPosition.z);
+                Console.WriteLine("The {0} Enemy is {1} and is at <{2},{3},{4}> location", enemyType, enemyState, enemyPosition.x, enemyPosition.y, enemyPosition.z);
             }
 
             // Part 4 - Function to Update elemnets of list with new x, y, z values
@@ -71,7 +100,8 @@ namespace Programming2_Console_Game
             }
         }
 
-        // Part 3 - Create Player Class with Constrctor and function that takes a list of enemies and calculated the distance to them.
+        // Player: When this command is called, ask for name of the player and create a player object with a randomly generated position on a 100 x 100 grid.
+        //Only 1 player can be created.
         public class Player
         {
 
@@ -84,16 +114,20 @@ namespace Programming2_Console_Game
             // Player instance constructor
             public Player(string name, int health, int Ammo, ThreeDPoint position)
             {
+                
                 playerName = name;
                 playerHealth = health;
                 playerAmmo = Ammo;
                 playerPosition = position;
+               
+                
             }
+           
 
             //Print status of the Player object
             public void printStatus()
             {
-                Console.WriteLine("The Player <{0}>  is at <{1},{2},{3}> location", playerName, playerPosition.x, playerPosition.y, playerPosition.z);
+                Console.WriteLine("The Player {0}  is at {1},{2},{3} location", playerName, playerPosition.x, playerPosition.y, playerPosition.z);
             }
 
             // Function to determine distannce to list of enemies
@@ -135,7 +169,15 @@ namespace Programming2_Console_Game
                 z = p3;
             }
         }
-
-
+        public class randomNumber
+         {
+            public int RandomNumber(int min, int max)
+        {
+            Random r = new Random();
+            return r.Next(min, max);
+        }
     }
+
+
+}
 }
